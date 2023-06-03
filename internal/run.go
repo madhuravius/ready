@@ -25,6 +25,7 @@ func NewRunConfig(debug bool, portsToCheck cli.StringSlice, started time.Time, t
 		}
 	}
 	return &RunConfig{
+		debug:          debug,
 		hostPortsReady: portsOpen,
 		started:        started,
 		timeout:        time.Duration(timeout) * time.Second,
@@ -48,7 +49,7 @@ func RunLoop(ctx *cli.Context) error {
 		return err
 	}
 
-	r.printDebugStatement(fmt.Sprintf("Starting ready checks (for up to %d seconds).\n", timeout))
+	r.printDebugStatement(fmt.Sprintf("Starting ready checks (for up to %d seconds).", timeout))
 	go func(r *RunConfig) {
 		for {
 			if r.allPortsFound() {
@@ -63,7 +64,7 @@ func RunLoop(ctx *cli.Context) error {
 	go func(r *RunConfig) {
 		for {
 			time.Sleep(DebugLogInterval)
-			r.printDebugStatement(fmt.Sprintf("Still running ready checks (%d/%d)...\n", r.portsFoundCount(), len(r.hostPortsReady)))
+			r.printDebugStatement(fmt.Sprintf("Still running ready checks (%d/%d)...", r.portsFoundCount(), len(r.hostPortsReady)))
 		}
 	}(r)
 
