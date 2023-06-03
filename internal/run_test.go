@@ -12,7 +12,7 @@ func TestRunLoopSuccess(t *testing.T) {
 	err := app.Run([]string{
 		"--debugfalse",
 		"--timeout=1",
-		fmt.Sprintf("--host-ports=localhost:%d", TestPort),
+		fmt.Sprintf("--host-ports=127.0.0.1:%d", TestPort),
 		"run",
 	})
 	assert.Nil(t, err)
@@ -24,7 +24,7 @@ func TestRunLoopPartialSuccess(t *testing.T) {
 	err := app.Run([]string{
 		"--debugfalse",
 		"--timeout=1",
-		fmt.Sprintf("--host-ports=localhost:%d,localhost:%d", TestPort, TestPortFailure),
+		fmt.Sprintf("--host-ports=127.0.0.1:%d,127.0.0.1:%d", TestPort, TestPortFailure),
 		"run",
 	})
 	assert.NotNil(t, err)
@@ -36,7 +36,7 @@ func TestRunLoopFailure(t *testing.T) {
 	err := app.Run([]string{
 		"--debugfalse",
 		"--timeout=1",
-		fmt.Sprintf("--host-ports=localhost:%d", TestPortFailure),
+		fmt.Sprintf("--host-ports=127.0.0.1:%d", TestPortFailure),
 		"run",
 	})
 	assert.NotNil(t, err)
