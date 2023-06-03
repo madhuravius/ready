@@ -39,7 +39,7 @@ func isPortActive(host string, port int) bool {
 func (r *RunConfig) portsFoundCount() int {
 	count := 0
 	for _, status := range r.hostPortsReady {
-		if status == true {
+		if status {
 			count += 1
 		}
 	}
@@ -48,7 +48,7 @@ func (r *RunConfig) portsFoundCount() int {
 
 func (r *RunConfig) allPortsFound() bool {
 	for _, status := range r.hostPortsReady {
-		if status != true {
+		if !status {
 			return false
 		}
 	}
@@ -58,7 +58,7 @@ func (r *RunConfig) allPortsFound() bool {
 func (r *RunConfig) checkPorts() {
 	wg := sync.WaitGroup{}
 	for hostPort, status := range r.hostPortsReady {
-		if status == true {
+		if status {
 			// already checked to be there, continue
 			continue
 		}
@@ -69,7 +69,7 @@ func (r *RunConfig) checkPorts() {
 			defer wg.Done()
 			if isPortActive(hostPort.host, hostPort.port) {
 				r.hostPortsReady[hostPort] = true
-				r.printDebugStatement(fmt.Sprintf("Found %s:%d to be available.\n", hostPort.host, hostPort.port))
+				r.printDebugStatement(fmt.Sprintf("Found %s:%d to be available.", hostPort.host, hostPort.port))
 			}
 		}(&wg, hostPort, r)
 	}
